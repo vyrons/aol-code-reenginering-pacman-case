@@ -206,12 +206,3 @@ Seluruh kode sumber dan dokumentasi teknik refactoring terdapat dalam masing-mas
 // RESULT: ...
 
 ---
-
-Jika kamu mau, aku juga bisa buat:
-
-✔ **PDF versi README**  
-✔ **Laporan lengkap Bab 1–5** (Pendahuluan → Smell → Teknik → Pengujian → Kesimpulan)  
-✔ **Diagram UML class**  
-
-Tinggal bilang: **“Saya mau laporan lengkap”** atau **“Saya mau UML”**.
-
