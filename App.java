@@ -1,25 +1,24 @@
+// App.java
+// Simple bootstrap: create frame and add GamePanel
+// SMELL: Previous main mixed startup & game logic.
+// TECHNIQUE: Keep bootstrap separate (single responsibility).
+// RESULT: same startup sequence but cleaner structure.
+
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 public class App {
-    public static void main(String[] args) throws Exception {
-        int rowCount = 21;
-        int columnCount = 19;
-        int tileSize = 32;
-        int boardWidth = columnCount * tileSize;
-        int boardHeight = rowCount * tileSize;
-
-        JFrame frame = new JFrame("Pac Man");
-        // frame.setVisible(true);
-        frame.setSize(boardWidth, boardHeight);
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        PacMan pacmanGame = new PacMan();
-        frame.add(pacmanGame);
-        frame.pack();
-        pacmanGame.requestFocus();
-        frame.setVisible(true);
-
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Pac Man - Refactored (Strict Copy Mode)");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            GamePanel panel = new GamePanel();
+            frame.add(panel);
+            frame.pack();
+            frame.setResizable(false);
+            frame.setLocationRelativeTo(null);
+            panel.requestFocusInWindow();
+            frame.setVisible(true);
+        });
     }
 }
