@@ -1,24 +1,18 @@
-// Block.java
-// This file contains the Block class which was an inner class in original PacMan.java.
-// SMELL: God Class / Bloater (original PacMan had a large inner Block used for many responsibilities).
-// TECHNIQUE: Extract Class (promote inner class to top-level class).
-// REASON: Keep the Block behavior identical but move it to its own file so code is modular.
-// RESULT: Behavior unchanged; now Block can be reused consistently.
-
 import java.awt.Image;
+import java.util.HashSet;
 
 public class Block {
-    public int x;
-    public int y;
-    public int width;
-    public int height;
-    public Image image;
+    private int x;
+    private int y;
+    private int width;
+    private int height;
+    private Image image;
 
-    public int startX;
-    public int startY;
-    public char direction = 'U'; // U D L R
-    public int velocityX = 0;
-    public int velocityY = 0;
+    private int startX;
+    private int startY;
+    private Direction direction = Direction.UP; 
+    private int velocityX = 0;
+    private int velocityY = 0;
 
     public Block(Image image, int x, int y, int width, int height) {
         this.image = image;
@@ -30,21 +24,14 @@ public class Block {
         this.startY = y;
     }
 
-    // NOTE: This method preserves the exact logic from the original:
-    // - set direction
-    // - update velocity
-    // - apply one step movement (x += velocityX, y += velocityY)
-    // - check collisions against walls; if collides, undo the step and restore previous direction/velocity
-    // We accept walls collection as parameter to avoid tight coupling to GamePanel internals.
-    public void updateDirection(char newDirection, java.util.HashSet<Block> walls) {
-        char prevDirection = this.direction;
+    public void updateDirection(Direction newDirection, HashSet<Block> walls) {
+        Direction prevDirection = this.direction;
         this.direction = newDirection;
         updateVelocity();
         this.x += this.velocityX;
         this.y += this.velocityY;
         for (Block wall : walls) {
             if (collision(this, wall)) {
-                // undo and restore previous direction & velocity (exact original behavior)
                 this.x -= this.velocityX;
                 this.y -= this.velocityY;
                 this.direction = prevDirection;
@@ -55,17 +42,16 @@ public class Block {
     }
 
     public void updateVelocity() {
-        // keeps same formula as original: tileSize/4
-        if (this.direction == 'U') {
+        if (this.direction == Direction.UP) {
             this.velocityX = 0;
             this.velocityY = -Constants.TILE_SIZE / 4;
-        } else if (this.direction == 'D') {
+        } else if (this.direction == Direction.DOWN) {
             this.velocityX = 0;
             this.velocityY = Constants.TILE_SIZE / 4;
-        } else if (this.direction == 'L') {
+        } else if (this.direction == Direction.LEFT) {
             this.velocityX = -Constants.TILE_SIZE / 4;
             this.velocityY = 0;
-        } else if (this.direction == 'R') {
+        } else if (this.direction == Direction.RIGHT) {
             this.velocityX = Constants.TILE_SIZE / 4;
             this.velocityY = 0;
         }
@@ -76,11 +62,26 @@ public class Block {
         this.y = this.startY;
     }
 
-    // Axis-aligned bounding-box collision check (kept identical to original)
     public static boolean collision(Block a, Block b) {
         return a.x < b.x + b.width &&
                a.x + a.width > b.x &&
                a.y < b.y + b.height &&
                a.y + a.height > b.y;
     }
+
+    // Getters and Setters
+    public int getX() { return x; }
+    public void setX(int x) { this.x = x; }
+    public int getY() { return y; }
+    public void setY(int y) { this.y = y; }
+    public int getWidth() { return width; }
+    public int getHeight() { return height; }
+    public Image getImage() { return image; }
+    public void setImage(Image image) { this.image = image; }
+    public Direction getDirection() { return direction; }
+    public void setDirection(Direction direction) { this.direction = direction; }
+    public int getVelocityX() { return velocityX; }
+    public void setVelocityX(int velocityX) { this.velocityX = velocityX; }
+    public int getVelocityY() { return velocityY; }
+    public void setVelocityY(int velocityY) { this.velocityY = velocityY; }
 }
