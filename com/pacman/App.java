@@ -4,6 +4,9 @@
 // TECHNIQUE: Keep bootstrap separate (single responsibility).
 // RESULT: same startup sequence but cleaner structure.
 
+package com.pacman;
+
+import com.pacman.view.GamePanel;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 

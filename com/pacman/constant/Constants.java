@@ -4,6 +4,8 @@
 // REASON: Make tuning safe and ensure any derived values remain consistent across refactor
 // RESULT: Same runtime behavior, easier to maintain and reason about.
 
+package com.pacman.constant;
+
 public class Constants {
     public static final int ROW_COUNT = 21;
     public static final int COLUMN_COUNT = 19;

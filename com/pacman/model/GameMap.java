@@ -4,6 +4,9 @@
 // REASON: Keep map data and loading logic intact but separate responsibility from UI.
 // RESULT: loadMap behavior identical; map kept inline (tileMap) per requirement.
 
+package com.pacman.model;
+
+import com.pacman.constant.Constants;
 import java.awt.Image;
 import java.util.HashSet;
 

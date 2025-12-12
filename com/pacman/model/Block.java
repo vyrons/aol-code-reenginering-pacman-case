@@ -1,3 +1,7 @@
+package com.pacman.model;
+
+import com.pacman.constant.Constants;
+import com.pacman.constant.Direction;
 import java.awt.Image;
 import java.util.HashSet;
 
