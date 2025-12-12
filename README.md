@@ -1,167 +1,222 @@
-# Pac-Man Java Code Reengineering  
-*Tugas Akhir – Code Reengineering (SOAL A – Strict Copy Mode)*  
+# Pac-Man Java Code Reengineering
+
+_Tugas Akhir – Code Reengineering (SOAL A – Strict Copy Mode)_
 
 Proyek ini merupakan hasil **refaktorisasi terhadap kode PacMan.java** yang pada awalnya terdiri dari satu file besar berisi seluruh logic permainan. Proses refaktorisasi dilakukan untuk mengatasi berbagai **code smell**, meningkatkan modularitas, dan menerapkan prinsip desain yang benar **tanpa mengubah logika program** sesuai ketentuan soal.
 
-Tujuan utama:  
-- Menghapus code smells  
-- Menerapkan teknik refactoring yang sesuai materi  
-- Menjaga logika game 100% identik dengan versi asli  
-- Menunjukkan penggunaan teknik reengineering seperti Extract Class, Extract Method, dan Introduce Constants
+Tujuan utama:
+
+- Menghapus code smells
+- Menerapkan teknik refactoring yang sesuai materi
+- Menjaga logika game 100% identik dengan versi asli
+- Menunjukkan penggunaan teknik reengineering seperti Extract Class, Extract Method, Introduce Constants, dan **Package Structuring**.
 
 ---
 
 # 1. Soal yang Dikerjakan (SOAL A)
 
-**Instruksi:**  
+**Instruksi:**
+
 > Lakukan refactoring terhadap kode game Pac-Man berikut dengan menerapkan teknik code reengineering.  
 > Logika program **tidak boleh diubah**, tetapi struktur, modularitas, keterbacaan, dan maintainability harus ditingkatkan.  
-> Setiap perubahan harus memiliki dokumentasi:  
-> - Jenis Code Smell  
-> - Teknik Refactoring  
-> - Alasan penggunaan teknik  
-> - Dampak terhadap struktur kode  
+> Setiap perubahan harus memiliki dokumentasi:
+>
+> - Jenis Code Smell
+> - Teknik Refactoring
+> - Alasan penggunaan teknik
+> - Dampak terhadap struktur kode
 
-Refactoring dilakukan dengan pendekatan **Strict Copy Mode**, yaitu:  
-- **Tidak menambah fitur**  
-- **Tidak mengubah logic**  
-- **Tidak mengubah mekanisme permainan**  
-- **Hanya memindahkan kode ke struktur yang lebih modular**  
+Refactoring dilakukan dengan pendekatan **Strict Copy Mode**, yaitu:
+
+- **Tidak menambah fitur**
+- **Tidak mengubah logic**
+- **Tidak mengubah mekanisme permainan**
+- **Hanya memindahkan kode ke struktur yang lebih modular**
 
 ---
 
 # 2. Identifikasi Code Smell & Teknik yang Digunakan
 
-### 2.1 God Class (Bloater)  
-**Lokasi:** PacMan.java (sebelum refactor ± 700 baris)  
-**Smell:**  
-- Satu kelas berisi UI, game loop, entity logic, collision, input, map loader, rendering, state management  
-- Melanggar Single Responsibility Principle  
+### 2.1 God Class (Bloater)
 
-**Teknik:**  
-- *Extract Class*: GamePanel, Block, GameMap  
-- *Extract Method*: loadImages(), move(), draw()  
+**Lokasi:** PacMan.java (sebelum refactor ± 700 baris)  
+**Smell:**
+
+- Satu kelas berisi UI, game loop, entity logic, collision, input, map loader, rendering, state management
+- Melanggar Single Responsibility Principle
+
+**Teknik:**
+
+- _Extract Class_: GamePanel, Block, GameMap
+- _Extract Method_: loadImages(), move(), draw()
 
 **Hasil:**  
 Struktur menjadi modular dan lebih mudah diuji, tanpa mengubah alur eksekusi maupun mekanik.
 
 ---
 
-### 2.2 Long Method (Bloater)  
-**Lokasi:**  
-- loadMap()  
-- move()  
+### 2.2 Long Method (Bloater)
 
-**Smell:**  
-- Method terlalu panjang, berisi banyak tahap proses (map parsing, entity creation, collision handling)  
+**Lokasi:**
 
-**Teknik:**  
-- *Extract Method*  
-- *Extract Class (GameMap)*  
+- loadMap()
+- move()
+
+**Smell:**
+
+- Method terlalu panjang, berisi banyak tahap proses (map parsing, entity creation, collision handling)
+
+**Teknik:**
+
+- _Extract Method_
+- _Extract Class (GameMap)_
 
 **Hasil:**  
 Pengurangan kompleksitas method dan pemisahan tanggung jawab, tetap mempertahankan urutan eksekusi asli.
 
 ---
 
-### 2.3 Magic Numbers (Primitive Obsession)  
-**Lokasi:**  
-- tileSize = 32  
-- boardWidth = tileSize * columnCount  
-- velocity Pac-Man = tileSize/4  
-- Timer = 50ms  
+### 2.3 Magic Numbers (Primitive Obsession)
 
-**Teknik:**  
-- *Introduce Constant → Constants.java*  
+**Lokasi:**
+
+- tileSize = 32
+- boardWidth = tileSize \* columnCount
+- velocity Pac-Man = tileSize/4
+- Timer = 50ms
+
+**Teknik:**
+
+- _Introduce Constant → Constants.java_
 
 **Hasil:**  
 Nilai konfigurasi terpusat, perubahan lebih aman, tidak mempengaruhi perilaku runtime.
 
 ---
 
-### 2.4 Data Clump  
-**Lokasi:** Map array + proses pemuatan map  
-**Smell:**  
-- Data map dan logic parsing selalu berpasangan  
-- Kode sulit dipindah atau diuji  
+### 2.4 Data Clump
 
-**Teknik:**  
-- *Extract Class → GameMap.java*  
+**Lokasi:** Map array + proses pemuatan map  
+**Smell:**
+
+- Data map dan logic parsing selalu berpasangan
+- Kode sulit dipindah atau diuji
+
+**Teknik:**
+
+- _Extract Class → GameMap.java_
 
 **Hasil:**  
 Struktur map lebih terorganisir, tetap mempertahankan isi map dan interpretasi karakter 100% sama.
 
 ---
 
-### 2.5 Feature Envy  
+### 2.5 Feature Envy
+
 **Lokasi:** updateDirection() mengakses walls yang berada di GamePanel  
-**Teknik:**  
-- *Move Method Parameter* (menambahkan walls sebagai argumen)  
+**Teknik:**
+
+- _Move Method Parameter_ (menambahkan walls sebagai argumen)
 
 **Hasil:**  
 Mengurangi ketergantungan kelas tanpa memodifikasi logika original (move → undo → revert).
 
 ---
 
+### 2.6 Poor Package Structure (Organizational Smell)
+
+**Lokasi:** Flat file structure (semua file di root)
+**Smell:**
+
+- Class-class tidak dikelompokkan berdasarkan fungsinya.
+- Sulit untuk membedakan antara Model, View, dan Utility.
+
+**Teknik:**
+
+- _Move Class_ / _Package Structuring_
+
+**Hasil:**
+
+- Kode diorganisir ke dalam package `com.pacman.model`, `com.pacman.view`, `com.pacman.constant`.
+- Mengikuti Java Best Practice.
+
+---
+
 # 3. Struktur Folder Setelah Refactoring
 
-PacmanRefactor/
-│
-├── App.java
-├── GamePanel.java
-├── GameMap.java
-├── Block.java
-├── Constants.java
-│
-├── wall.png
-├── pacmanUp.png
-├── pacmanDown.png
-├── pacmanLeft.png
-├── pacmanRight.png
-├── blueGhost.png
-├── orangeGhost.png
-├── pinkGhost.png
-├── redGhost.png
+Struktur proyek kini mengikuti standar _best practice_ Java dengan penggunaan package:
 
-**Catatan:**  
-Struktur dipertahankan sederhana **tanpa package**, sesuai instruksi dan kode asli.
+```
+com/
+└── pacman/
+    ├── App.java                  // Entry Point
+    ├── constant/                 // Constants & Enums
+    │   ├── Constants.java
+    │   └── Direction.java
+    ├── model/                    // Game Logic & Data
+    │   ├── Block.java
+    │   ├── GameMap.java
+    │   └── GameModel.java
+    └── view/                     // UI & Visualization
+        └── GamePanel.java
+```
+
+File resource (gambar) tetap berada di root directory atau sesuai konfigurasi resources:
+
+- `wall.png`
+- `pacmanUp.png`, dll.
 
 ---
 
 # 4. Penjelasan File Hasil Refactoring
 
-### **Block.java**  
-- Representasi entitas asal (Pac-Man, ghost, wall, food)  
-- Berisi updateDirection(), updateVelocity(), reset(), collision()  
-- Logika identik dengan kode original (termasuk mekanisme "test movement then undo")
+### **com.pacman.model.Block**
 
-### **GameMap.java**  
-- Memuat tileMap asli tanpa modifikasi  
-- Memiliki fungsi loadMap() untuk menghasilkan walls, foods, ghosts, dan pacman  
-- Menjaga mapping karakter → entity sama seperti kode awal
+- Representasi entitas asal (Pac-Man, ghost, wall, food)
+- Berisi updateDirection(), updateVelocity(), reset(), collision()
+- Logika identik dengan kode original
 
-### **GamePanel.java**  
-- Menggantikan peran kelas PacMan sebagai komponen permainan  
-- Memegang rendering, loop, movement, collision, scoring  
-- Semua logic sama seperti versi awal, hanya dipindahkan dengan lebih terstruktur
+### **com.pacman.model.GameMap**
 
-### **Constants.java**  
-- Menyimpan tileSize, rowCount, columnCount, speed, timer delay  
-- Menghapus magic numbers dari seluruh file lain
+- Memuat tileMap asli tanpa modifikasi
+- Memiliki fungsi loadMap() untuk menghasilkan walls, foods, ghosts, dan pacman
 
-### **App.java**  
-- Menangani bootstrap dan inisialisasi frame  
-- Memisahkan tanggung jawab main method (kode asli mencampur UI dan game logic)
+### **com.pacman.model.GameModel**
+
+- Mengelola state permainan (score, lives, game over logic)
+- Memisahkan logika permainan dari tampilan (View)
+
+### **com.pacman.view.GamePanel**
+
+- Menangani rendering, input listener (Key Adapter)
+- Mengambil data dari GameModel untuk ditampilkan
+
+### **com.pacman.constant.Constants & Direction**
+
+- Menyimpan konfigurasi global dan enum arah pergerakan
+
+### **com.pacman.App**
+
+- Menangani bootstrap dan inisialisasi JFrame
 
 ---
 
 # 5. Cara Menjalankan Program
 
-1. Letakkan semua file `.java` dan `.png` dalam folder yang sama.  
-2. Compile semua class:
-javac *.java
+1. Pastikan berada di root directory project (folder di mana folder `com` berada dan file gambar `.png` berada).
 
-3. Jalankan:
+2. **Compile** project:
+
+   ```bash
+   javac com/pacman/App.java
+   ```
+
+   _(Atau compile semua file jika perlu: `javac com/pacman/\*\*/_.java`)\*
+
+3. **Jalankan** program:
+   ```bash
+   java com.pacman.App
+   ```
 
 Game akan berjalan **dengan perilaku identik** dengan versi PacMan.java awal.
 
@@ -171,15 +226,15 @@ Game akan berjalan **dengan perilaku identik** dengan versi PacMan.java awal.
 
 Semua mekanisme berikut telah diverifikasi tetap sama:
 
-- Pergerakan Pac-Man (pixel per frame = tileSize/4)  
-- updateDirection menggunakan model test-forward + undo collision  
-- Ghost movement random + forced upward movement  
-- Food 4×4 pixel + score 10  
-- Lives system 3 → 0 → Game Over  
-- Reset map & posisi entity saat food habis  
-- Timer loop 50ms (20 FPS)  
-- Rendering urutan sama  
-- Semua collision identik  
+- Pergerakan Pac-Man (pixel per frame = tileSize/4)
+- updateDirection menggunakan model test-forward + undo collision
+- Ghost movement random + forced upward movement
+- Food 4×4 pixel + score 10
+- Lives system 3 → 0 → Game Over
+- Reset map & posisi entity saat food habis
+- Timer loop 50ms (20 FPS)
+- Rendering urutan sama
+- Semua collision identik
 
 ---
 
@@ -187,22 +242,10 @@ Semua mekanisme berikut telah diverifikasi tetap sama:
 
 Refactoring ini menunjukkan:
 
-- Peningkatan signifikan dalam arsitektur kode  
-- Penghilangan code smell tanpa mengganggu logika  
-- Menerapkan berbagai teknik refactoring sesuai materi Code Reengineering  
+- Peningkatan signifikan dalam arsitektur kode
+- Penghilangan code smell tanpa mengganggu logika
+- Menerapkan berbagai teknik refactoring sesuai materi Code Reengineering
+- **Penerapan struktur package yang rapi (Model-View Separation)**
 - Mempertahankan kesepadanan perilaku (strict-copy mode)
 
 Dengan struktur modular ini, game mudah dikembangkan lebih lanjut tanpa risiko merusak logika yang ada.
-
----
-
-# 8. Lampiran  
-Seluruh kode sumber dan dokumentasi teknik refactoring terdapat dalam masing-masing file `.java` melalui komentar:
-
-```java
-// SMELL: ...
-// TECHNIQUE: ...
-// REASON: ...
-// RESULT: ...
-
----
