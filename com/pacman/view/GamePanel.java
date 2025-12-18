@@ -45,16 +45,16 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     }
 
     private void loadImages() {
-        wallImage = new ImageIcon(getClass().getResource("/wall.png")).getImage();
-        blueGhostImage = new ImageIcon(getClass().getResource("/blueGhost.png")).getImage();
-        orangeGhostImage = new ImageIcon(getClass().getResource("/orangeGhost.png")).getImage();
-        pinkGhostImage = new ImageIcon(getClass().getResource("/pinkGhost.png")).getImage();
-        redGhostImage = new ImageIcon(getClass().getResource("/redGhost.png")).getImage();
+        wallImage = new ImageIcon(getClass().getResource("../assets/wall.png")).getImage();
+        blueGhostImage = new ImageIcon(getClass().getResource("../assets/blueGhost.png")).getImage();
+        orangeGhostImage = new ImageIcon(getClass().getResource("../assets/orangeGhost.png")).getImage();
+        pinkGhostImage = new ImageIcon(getClass().getResource("../assets/pinkGhost.png")).getImage();
+        redGhostImage = new ImageIcon(getClass().getResource("../assets/redGhost.png")).getImage();
 
-        pacmanUpImage = new ImageIcon(getClass().getResource("/pacmanUp.png")).getImage();
-        pacmanDownImage = new ImageIcon(getClass().getResource("/pacmanDown.png")).getImage();
-        pacmanLeftImage = new ImageIcon(getClass().getResource("/pacmanLeft.png")).getImage();
-        pacmanRightImage = new ImageIcon(getClass().getResource("/pacmanRight.png")).getImage();
+        pacmanUpImage = new ImageIcon(getClass().getResource("../assets/pacmanUp.png")).getImage();
+        pacmanDownImage = new ImageIcon(getClass().getResource("../assets/pacmanDown.png")).getImage();
+        pacmanLeftImage = new ImageIcon(getClass().getResource("../assets/pacmanLeft.png")).getImage();
+        pacmanRightImage = new ImageIcon(getClass().getResource("../assets/pacmanRight.png")).getImage();
     }
 
     @Override
